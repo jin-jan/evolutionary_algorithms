@@ -4,7 +4,10 @@ import sys
 import os
 import subprocess
 import re
+import ast
 from lib.logger import LOG
+from lib.algorithm_framework import random_vector
+from lib.evolutionary_strategy import search
 import xml.etree.ElementTree as ElementTree
 from optparse import OptionParser, OptionGroup
 
@@ -18,7 +21,7 @@ class ExtraParser(OptionParser):
             return self.epilog
 
 
-def read_algorithm_config(config_file, setup_algo):
+def read_algorithm_config(config_file):
     """Read config file and return a list of values"""
     LOG.info("Reading config file ...")
     config_data = ()
@@ -26,17 +29,10 @@ def read_algorithm_config(config_file, setup_algo):
         data = f.read()
     out_re = data.replace("\r", "").replace(" ", "")
     out_ind = out_re.split('\n')
-    if setup_algo:
-        config_data = (out_ind[0].split(':')[1], out_ind[1].split(':')[1],
-                       out_ind[2].split(':')[1], out_ind[3].split(':')[1],
-                       out_ind[4].split(':')[1], out_ind[5].split(':')[1])
-    else:
-        config_data = (out_ind[0].split(':')[1], out_ind[1].split(':')[1],
-                       out_ind[2].split(':')[1], out_ind[3].split(':')[1],
-                       out_ind[4].split(':')[1], out_ind[5].split(':')[1],
-                       out_ind[6].split(':')[1])
-    # config_data (Population_Size, Population_Range, Parent_Selection,
-    #              Reproduction, Competition, Termination)
+    config_data = (out_ind[0].split(':')[1], out_ind[1].split(':')[1],
+                   out_ind[2].split(':')[1], out_ind[3].split(':')[1])
+    # config_data (Population_Range, Termination, Adaptive_Mutation_Step,
+    #              Survivor_Selection)
     LOG.info("{0}".format(config_data))
     return config_data
 
@@ -47,20 +43,15 @@ if __name__ == '__main__':
     parser = ExtraParser(epilog=
 """
 ***GA default configuration file parameters***
-    Population_Size:        50,
     Population_Range:       30,
-    Parent_Selection:       Age,
-    Reproduction:           Mutation,
-    Competition:            10,
-    Termination:            100,
+    Termination:            10,
+    Adaptive_Mutation_Step: False
+    Survivor_Selection:     False
 ***ES default configuration file parameters***
-    Population_Size:        50
-    Population_Range:       30
-    Parent_Selection:
-    Reproduction:           Mutation
-    Competition:
-    Termination:
+    Population_Range:       30,
+    Termination:            10,
     Adaptive_Mutation_Step: True
+    Survivor_Selection:     False
 """)
 
     parser.add_option("-g", "--ga-conf", dest="ga_conf",
@@ -77,12 +68,14 @@ if __name__ == '__main__':
             raise OptsError("Missing arguments")
 
         if opts.ga_conf:
-            setup_algo = True
-            config_data = read_algorithm_config(opts.ga_conf, setup_algo)
+            LOG.info("Starting GA")
+            config_data = read_algorithm_config(opts.ga_conf)
 
         if opts.es_conf:
-            setup_algo = False
-            config_data = read_algorithm_config(opts.es_conf, setup_algo)
+            LOG.info("Starting ES")
+            pop_range, term, ad_mut_stp, mu_lambda = read_algorithm_config(opts.es_conf)
+            search(int(term), int(pop_range), ast.literal_eval(ad_mut_stp),
+                   ast.literal_eval((mu_lambda)))
 
     except OptsError as e:
         parser.print_help()
