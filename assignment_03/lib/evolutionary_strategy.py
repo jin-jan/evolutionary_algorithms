@@ -29,13 +29,16 @@ def mutate_problem(vector, stdv):
 
 def mutate_strategy(stdv):
     # sigma'i = sigmai * e(tao_p*N(0,1) + tao * Ni(0,1))
-    mu_p = []
+    sigma_p = []
     tau = 1.0/(np.sqrt(2.0*len(stdv)))
     tau_p = 1.0/np.sqrt(2*np.sqrt(len(stdv)))
     for i in stdv:
-        import pdb;pdb.set_trace()
-        mu_p.append(i * np.exp(tau_p * random_gaussian(0, 1) + tau * random_gaussian(0, 1)))
-    return mu_p
+        sigma = i * np.exp(tau_p * random_gaussian(0, 1) + tau * random_gaussian(0, 1))
+        if sigma >= 1:
+            sigma_p.append(np.random.random_sample(1)))
+        else:
+            sigma_p.append(sigma)
+    return sigma_p
 
 
 def mutate(vector, stdv):
