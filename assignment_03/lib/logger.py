@@ -12,6 +12,7 @@ DEBUG = 20
 LOG_FORMAT_GEN = ('[%(asctime)s][%(levelname)s]:%(message)s')
 LOG_FORMAT_INFO = ('[%(asctime)s][%(levelname)s]:%(message)s')
 LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+LOG_FILENAME = 'assign3.log'
 
 if hasattr(sys, 'frozen'):
     _SRCFILE = "logging%s__init__%s" % (os.sep, __file__[-4:])
@@ -97,13 +98,15 @@ LOG = logging.getLogger("ce_logger")
 LOG.propagate = False
 LOG.setLevel(DEBUG)
 
+needRoll = os.path.isfile(LOG_FILENAME)
+
 logging.addLevelName(INFO, "Info")
 logging.addLevelName(RESULTBF, "ResultBF")
 logging.addLevelName(RESULTAF, "ResultAF")
 logging.addLevelName(DEBUG, "Debug")
 STDOUT_HANDLER = logging.StreamHandler(sys.stdout)
 STDOUT_HANDLER.setLevel(INFO)
-FILE_HANDLER = logging.FileHandler('assign3.log')
+FILE_HANDLER = logging.FileHandler(LOG_FILENAME, 'w')
 FILE_HANDLER.setLevel(DEBUG)
 STDOUT_FMT = logging.Formatter(fmt=LOG_FORMAT_INFO,
                                datefmt=LOG_DATE_FORMAT)

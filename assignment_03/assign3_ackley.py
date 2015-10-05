@@ -5,11 +5,16 @@ import os
 import subprocess
 import re
 import ast
+import shutil
 from lib.logger import LOG
 from lib.algorithm_framework import random_vector
-from lib.evolutionary_strategy import search
+from lib.evolutionary_strategy import search_es
+from lib.genetic_algorithm import search_ga
+from lib.plot_graph import plot_data
 import xml.etree.ElementTree as ElementTree
 from optparse import OptionParser, OptionGroup
+
+LOG_NAME = 'assign3.log'
 
 
 class OptsError(Exception):
@@ -43,7 +48,7 @@ if __name__ == '__main__':
     parser = ExtraParser(epilog=
 """
 ***GA default configuration file parameters***
-    Population_Range:       30,
+    Population_Size:       30,
     Termination:            10,
     Adaptive_Mutation_Step: False
     Survivor_Selection:     False
@@ -68,14 +73,21 @@ if __name__ == '__main__':
             raise OptsError("Missing arguments")
 
         if opts.ga_conf:
+            algorithm_name = 'GA behaivor'
             LOG.info("Starting GA")
-            config_data = read_algorithm_config(opts.ga_conf)
+            pop_size, term, ad_mut_stp, mu_lambda = read_algorithm_config(opts.ga_conf)
+            search_ga(int(term), int(pop_size), ast.literal_eval(ad_mut_stp),
+                      ast.literal_eval((mu_lambda)))
+            plot_data(algorithm_name, LOG_NAME)
 
         if opts.es_conf:
+            algorithm_name = 'ES behaivor'
             LOG.info("Starting ES")
             pop_range, term, ad_mut_stp, mu_lambda = read_algorithm_config(opts.es_conf)
-            search(int(term), int(pop_range), ast.literal_eval(ad_mut_stp),
-                   ast.literal_eval((mu_lambda)))
+            search_es(int(term), int(pop_range), ast.literal_eval(ad_mut_stp),
+                      ast.literal_eval((mu_lambda)))
+            plot_data(algorithm_name, LOG_NAME)
+
 
     except OptsError as e:
         parser.print_help()

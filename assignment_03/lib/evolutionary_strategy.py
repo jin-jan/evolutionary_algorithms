@@ -33,7 +33,8 @@ def mutate_strategy(stdv):
     tau = 1.0/(np.sqrt(2.0*len(stdv)))
     tau_p = 1.0/np.sqrt(2*np.sqrt(len(stdv)))
     for i in stdv:
-        mu_p.append(i * np.exp(tau_p * random_gaussian(0, 1) + tau * random_gaussian(0, 1)))
+        if i = 0.2:
+            mu_p.append(i * np.exp(tau_p * random_gaussian(0, 1) + tau * random_gaussian(0, 1)))
     return mu_p
 
 
@@ -49,7 +50,7 @@ def init_population(pop_range):
     return pop, stdv
 
 
-def search(max_gens, pop_range, ad_mut_stp, mu_lambda):
+def search_es(max_gens, pop_range, ad_mut_stp, mu_lambda):
     global GENERATION
     pop = init_population(pop_range)
     best = fitness_func(pop[0])
@@ -66,5 +67,5 @@ def search(max_gens, pop_range, ad_mut_stp, mu_lambda):
         if mu_lambda:
             pop = init_population(pop_range)
             best = fitness_func(pop[0])
-        LOG.debug("Generation>{0}:new best>{1}".format(GENERATION, best))
+        LOG.rbf("Generation>{0}:new best>{1}".format(GENERATION, best))
     return best
