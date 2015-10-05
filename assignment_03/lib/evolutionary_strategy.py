@@ -33,8 +33,8 @@ def mutate_strategy(stdv):
     tau = 1.0/(np.sqrt(2.0*len(stdv)))
     tau_p = 1.0/np.sqrt(2*np.sqrt(len(stdv)))
     for i in stdv:
-        if i = 0.2:
-            mu_p.append(i * np.exp(tau_p * random_gaussian(0, 1) + tau * random_gaussian(0, 1)))
+        import pdb;pdb.set_trace()
+        mu_p.append(i * np.exp(tau_p * random_gaussian(0, 1) + tau * random_gaussian(0, 1)))
     return mu_p
 
 

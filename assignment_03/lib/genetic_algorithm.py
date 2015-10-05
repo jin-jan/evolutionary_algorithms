@@ -22,6 +22,7 @@ def mutate_random(tuple_population):
 
 
 def search_ga(max_gens, pop_size, target):
+    generation = 0
     population = init_population(pop_size)
     best = fitness_func(population)
     while generation < iterations:
@@ -31,5 +32,5 @@ def search_ga(max_gens, pop_size, target):
             LOG.info("Better individual")
             population = new_population
             fitness = new_fitness
-        LOG.rbf("Generation>{0}:new best>{1}".format(generation, best)
+        LOG.rbf("Generation>{0}:new best>{1}".format(generation, best))
         generation = generation + 1
