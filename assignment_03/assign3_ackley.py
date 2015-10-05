@@ -86,6 +86,7 @@ if __name__ == '__main__':
             pop_range, term, ad_mut_stp, mu_lambda = read_algorithm_config(opts.es_conf)
             search_es(int(term), int(pop_range), ast.literal_eval(ad_mut_stp),
                       ast.literal_eval((mu_lambda)))
+            import pdb;pdb.set_trace()
             plot_data(algorithm_name, LOG_NAME)
 
 

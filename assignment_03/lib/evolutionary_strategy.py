@@ -35,7 +35,7 @@ def mutate_strategy(stdv):
     for i in stdv:
         sigma = i * np.exp(tau_p * random_gaussian(0, 1) + tau * random_gaussian(0, 1))
         if sigma >= 1:
-            sigma_p.append(np.random.random_sample(1)))
+            sigma_p.append(np.random.random_sample(1))
         else:
             sigma_p.append(sigma)
     return sigma_p
