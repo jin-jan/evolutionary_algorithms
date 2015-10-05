@@ -26,7 +26,7 @@ def plot_data(algorithm_name, log_name):
     yv = np.array(data_plot[1])
 
     ploty.plot(xv, yv)
-
+    ploty.savefig("{0}.png".format(algorithm_name))
     ploty.xlabel('Iterations')
     ploty.ylabel('Value')
     ploty.title(algorithm_name)

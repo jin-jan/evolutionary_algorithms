@@ -7,7 +7,6 @@ import re
 import ast
 import shutil
 from lib.logger import LOG
-from lib.algorithm_framework import random_vector
 from lib.evolutionary_strategy import search_es
 from lib.genetic_algorithm import search_ga
 from lib.plot_graph import plot_data
@@ -48,13 +47,13 @@ if __name__ == '__main__':
     parser = ExtraParser(epilog=
 """
 ***GA default configuration file parameters***
-    Population_Size:       30,
-    Termination:            10,
+    Population_Size:        30,
+    Termination:            10000,
     Adaptive_Mutation_Step: False
     Survivor_Selection:     False
 ***ES default configuration file parameters***
     Population_Range:       30,
-    Termination:            10,
+    Termination:            15000,
     Adaptive_Mutation_Step: True
     Survivor_Selection:     False
 """)
@@ -73,21 +72,22 @@ if __name__ == '__main__':
             raise OptsError("Missing arguments")
 
         if opts.ga_conf:
-            algorithm_name = 'GA behaivor'
+            algorithm_name = 'GA behavior'
             LOG.info("Starting GA")
             pop_size, term, ad_mut_stp, mu_lambda = read_algorithm_config(opts.ga_conf)
             search_ga(int(term), int(pop_size), ast.literal_eval(ad_mut_stp),
                       ast.literal_eval((mu_lambda)))
             plot_data(algorithm_name, LOG_NAME)
+            LOG.info("Finish GA")
 
         if opts.es_conf:
-            algorithm_name = 'ES behaivor'
+            algorithm_name = 'ES behavior'
             LOG.info("Starting ES")
             pop_range, term, ad_mut_stp, mu_lambda = read_algorithm_config(opts.es_conf)
             search_es(int(term), int(pop_range), ast.literal_eval(ad_mut_stp),
                       ast.literal_eval((mu_lambda)))
-            import pdb;pdb.set_trace()
             plot_data(algorithm_name, LOG_NAME)
+            LOG.info("Finish ES")
 
 
     except OptsError as e:

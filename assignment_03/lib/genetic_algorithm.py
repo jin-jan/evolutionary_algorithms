@@ -1,5 +1,6 @@
 import random
 from common_algo import fitness_func
+from logger import LOG
 
 TARGET_VALUE = None
 
@@ -21,16 +22,16 @@ def mutate_random(tuple_population):
     return population
 
 
-def search_ga(max_gens, pop_size, target):
+def search_ga(max_gens, pop_size, ad_mut_stp, mu_lambda):
     generation = 0
     population = init_population(pop_size)
     best = fitness_func(population)
-    while generation < iterations:
+    while generation < max_gens:
         new_population = mutate_random(tuple(population))
-        new_fitness = fitness_function(new_population)
-        if new_fitness <= fitness:
-            LOG.info("Better individual")
+        new_best = fitness_func(new_population)
+        if new_best <= best:
+            LOG.debug("Better population>{0}".format(new_population))
             population = new_population
-            fitness = new_fitness
+            best = new_best
         LOG.rbf("Generation>{0}:new best>{1}".format(generation, best))
         generation = generation + 1
